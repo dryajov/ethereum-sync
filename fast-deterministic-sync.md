@@ -26,9 +26,9 @@ The simplified flow is something like this:
 
 ### "Client" flow
 
-- Pick a desired prefix size and generate the range of chunk roots to be requested
-  - Pick some prefixes and request them from the "server" for a given state or storage root
-  - Server responds with the chunks
+- pick a desired prefix size and generate the range of chunk roots to be requested
+  - pick some prefixes and request them from the "server" for a given state or storage root
+  - server responds with the chunks
     - all chunks delivered, repeat the flow for the next set of prefixes
     - the chunk did not fit in one response, but the server delivered what it could and the new prefix where the chunk stops
       - repeat the flow using the stop prefix above
@@ -55,14 +55,37 @@ The simplified flow is something like this:
 - The same protocol works for the state and storage tries
 - All requests are tied to a state or storage root
 - Requested prefixes could be sequential, range based, or even based on clients provided "accounts of interest" (which enables a type of "Light" mode in the client, more on this later)
-- A request with prefix `0x0`, can be used to pull the first few levels of the trie, and then use the stop path to determine the prefix length for subsequent request.
 
 ### Several optimizations can be applied
 
 - If the server doesn't have a chunk for the requested root/block, return error and the next best block for which the server does have the chunk
 - A streaming mode can be added, where the server keeps replying with chunks for the prefix until EOF, so the client doesn't have to keep re-requesting at the stop path
-- A flag can be added to the request, to indicate that the server can skip/include the intermediary nodes to reach the beginning of the chunk (the "stem") and only deliver nodes from where the chunk starts (`key` - `prefix length`)
+- A flag can be added to the request, to indicate that the server can skip/include the intermediary nodes to reach the beginning of the chunk (the "stem") and only deliver nodes from where the chunk start (`key` - `prefix length`)
 - The `stop path` can be used as a hint to generate another set of prefixes, e.g. if the stop path was `0x123456789`, instead of requesting just along the `0x12345678a` prefix, send a range [`0x12345678a`, `0x12345679f`], since it's best effort the server will send what it can (this might lead do some data overlap tho)
+- A request with prefix `0x0`, can be used to pull the first few levels of the trie, and then use the stop path to determine the prefix length for subsequent request.
+
+## Modified flow with `0x0` prefix
+
+In full sub-trie mode, this allows retrieving the first few levels of the trie before hitting the maximum allowed chunk size. This has two advantages, 1) we can fill in the first few levels in one request right at the beginning, 2) it gives us an approximate prefix length to work with. 
+
+For storage tries, in many cases this would be sufficient to retrieve the full trie. The large majority of contract storage doesn't exceed a few hundred KBs.
+
+NOTE: in leaf mode, this would simply mean "give me all the leafs".
+
+### "Client" flow
+
+- make a request to "server" at some root, with prefix `0x0`
+  - server responds with a chunk and a stop path
+    - use the `key length - stop path length` to determine the prefix length, e.g. if the chunk is built up to level 3, use that as the prefix length
+  - proceed as in the simplified flow above
+  - error, move to the next peer
+
+### "Server" flow
+
+- a chunk request arrived, if the prefix is `0x0`
+  - build a chunk from the root up to a right where it becomes greater than `max chunk size`
+    - return the chunk along with the stop path
+  - error, no chunk available at root
 
 ## Retrieving only leafs (accounts and storage keys)
 
