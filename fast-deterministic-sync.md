@@ -70,9 +70,9 @@ In general, this should "just work" for leaf nodes as apposed to full sub-tries 
 
 ## The actual protocol
 
-- `GetChunks` [`0x...`, `root`, [`prefixes`], `isRange`, `maxSize`] - Request chunks of partial state
+- `GetChunks` [`0x...`, `root`, [`prefixes`, ...], `isRange`, `maxSize`] - Request chunks of partial state
   - `root` - the state/storage root to use for the lookups
-  - `prefixes` - the chunks prefixes to request, can be a list, ranges or an individual prefix
+  - `prefixes` - the prefixes to request, can be a list, ranges or an individual prefix
   - `isRange` - flag to indicate if the prefixes is a range. If `true` prefixes are treated as range pairs and the total number of elements has to be even
   - `maxSize` - maximum size of the chunk in bytes the client is willing to accept, if the chunk is larger than this size, the server will stop building the chunk and return the path at which it stopped
 
