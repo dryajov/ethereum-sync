@@ -69,16 +69,23 @@ The simplified flow is something like this:
 In general, this should "just work" for leaf nodes as apposed to full sub-tries as well. But it does assume that the clients can effectively retrieve accounts and storage keys based on prefixes.
 
 ## The actual protocol
+
 - `GetChunks` [`0x...`, `root`, [`prefixes`], `isRange`, `maxSize`] - Request chunks of partial state
   - `root` - the state/storage root to use for the lookups
   - `prefixes` - the chunks prefixes to request, can be a list, ranges or an individual prefix
   - `isRange` - flag to indicate if the prefixes is a range. If `true` prefixes are treated as range pairs and the total number of elements has to be even
   - `maxSize` - maximum size of the chunk in bytes the client is willing to accept, if the chunk is larger than this size, the server will stop building the chunk and return the path at which it stopped
 
-- `ChunkData` [`0x...`, [[`prefix`, [[`hash`: `rlp data`, ...], `stopPath`]]] - Returns a set of previously requested chunks
-  - `prefix` - an array of two elements, the first is a map of prefixes to node data, and the second an optional `stopPath`
-    - each entry in the map corresponds to a list of  key-value pairs, where the first element is the a trie node hash and the second the rlp encoded data
-    - `stopPath` - if the requested chunk is too large, it contains the path at which the server stopped building the chunk, used by the client to resume downloading from this path
+- `ChunkData` [`0x...`, [[`prefix`, [[`hash`: `rlp data`, ...] || [`error`, [`code`, `data`]], `stopPath`]]] - Returns a set of previously requested chunks
+  - `prefix` - can be either, an array of two elements; the first is a map of prefixes to node data, and the second an optional `stopPath`; otherwise its an `error` field with an error code and optional data
+    - `map` & `stopPath`
+      - each entry in the map corresponds to a list of  key-value pairs, where the first element is a   trie node hash and the second the rlp encoded data
+      - `stopPath` - if the requested chunk is too large, it contains the path at which the server stopped building the chunk, used by the client to resume downloading from this path
+    - `error` - a list of two elements, `code` and optional `data`, e.g. [`code`, `data`] - possible codes are
+      - `0x0` no chunk for this root, but if `data` is present then it is the closes root for which it is available
+      - `0x1` no chunk for this prefix
+      - `0x2` back-off, too many requests
+      - `0x4` invalid request
 
 ## Partially synced clients
 
