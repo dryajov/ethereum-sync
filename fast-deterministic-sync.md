@@ -8,7 +8,7 @@ Prefix based chunking works something like this, pick some prefix length and use
 
 ## Full sub-tries vs leaf nodes
 
-A full sub-trie is a chunk with all the intermediary and leaf nodes along a prefix path meaning that the sub-trie is fully traversable along the prefix, and the validity of the chunk can be quickly verified. This has the advantage of discarding invalid chunks early on but increases on the wire overhead. 
+A full sub-trie is a chunk with all the intermediary and leaf nodes along a prefix path meaning that the sub-trie is fully traversable along that prefix, and the validity of the chunk can be quickly verified. This has the advantage of discarding invalid chunks early on but increases on the wire overhead. 
 
 Contrasted to delivering just the leafs, which doesn't have any additional on the wire overhead, but an attacker can feed invalid data before the client realizes and disconnects. 
 
@@ -85,9 +85,9 @@ Whit this mechanism, a partially synced client can serve other clients for the c
 
 ## Light clients
 
-A light client can be built on top of a protocol like this. For example, a client running in light mode, can sync only the chunks that it requires based on the accounts/storage keys that are requested from it, but just as in the case of partially synced clients, it can also serve other nodes that are syncing up, by just delivering the chunks that it has.
+A light client can be built on top of a protocol like this. For example, a client running in light mode, can sync only the chunks that it requires based on the accounts/storage keys that are requested from it, but just as in the case of partially synced clients, it can also serve other nodes that are syncing up by delivering only the chunks it has.
 
 ## Additional considerations
 
-- Some prefixes might be empty, but provided that the trie is relatively balanced that would be a rare occurrence, provided the prefix is not too large. It would be nice to be able to verify this somehow.
-- Clients needs to parse the chunk to extract the accounts. For one to validate the chunk and store them away, but also to extract all the storage roots and subsequently request those as well. Parsing the chunk (traversing), should not be very costly, but something not required when sending just the leafs.
+- Some prefixes might be empty, but provided that the trie is relatively balanced and the prefix is not too large, it should be a rare occurrence. It would be nice to be able to verify this though.
+- Clients needs to parse the chunk to extract the accounts. For one to validate and store the chunks, but also to extract all the storage roots and subsequently request those as well. Parsing the chunk (traversing), should not be very costly, but something not required when sending just the leafs.
