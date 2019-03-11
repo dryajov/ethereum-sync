@@ -1,4 +1,4 @@
-# Fast deterministic sync
+# Fast prefix sync
 
 > A sync protocol that relies on the prefix nature of radix tries and consequently the Modified Merkle Patricia Trie. The main idea is the ability to offset into the trie using a prefix to select all data along a path starting with that prefix. It also has the advantage of working with both, full sub-tries (intermediary and leaf nodes) as well as just leaf nodes (accounts and storage entries).
 
