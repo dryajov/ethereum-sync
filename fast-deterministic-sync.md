@@ -66,7 +66,7 @@ The simplified flow is something like this:
 
 ## Retrieving only leafs (accounts and storage keys)
 
-In general, this should "just work" for leaf nodes as apposed to full sub-tries as well. But it does assume that the clients can effectively retrieve accounts and storage keys based on prefixes.
+In general, this should "just work" for leaf nodes as apposed to full sub-tries as well. But it does assume that the clients can effectively retrieve accounts and storage keys based on prefixes. By this I mean that, if the node stores the accounts and optionally storage keys on some fast cache, that there is a way of quickly retrieving them from that cash based on prefixes without loosing the optimizations of the cache.
 
 ## The actual protocol
 
