@@ -83,7 +83,7 @@ NOTE: in leaf mode, this would simply mean "give me all the leafs".
 ### "Server" flow
 
 - a chunk request arrived, if the prefix is `0x0`
-  - build a chunk from the root up to a right where it becomes greater than `max chunk size`
+  - build a chunk from the root right up to where it becomes greater than `max chunk size`
     - return the chunk along with the stop path
   - error, no chunk available at root
 
