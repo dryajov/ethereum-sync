@@ -91,8 +91,8 @@ A light client can be built on top of a protocol like this. For example, a clien
 ## Additional considerations
 
 - Some prefixes might be empty, but provided that the trie is relatively balanced and the prefix is not too large, it should be a rare occurrence. It would be nice to be able to verify this though.
-- Clients needs to parse the chunk to extract the accounts. For one to validate and store the chunks, but also to extract all the storage roots and subsequently request those as well. Parsing the chunk (traversing), should not be very costly, but something not required when sending just the leafs.
+- Clients need to parse the chunk to extract the accounts. For one to validate and store the chunks, but also to extract all the storage roots and subsequently request those as well. Parsing the chunk (traversing), should not be very costly, but something not required when sending just the leafs.
 
 ## Prefix parity
 
-Since keys and prefixes are sent as nibbles, some schema to signal parity is required, I'm sure there are tons of ways of doing it, but I haven't though about it too much yet, that said what's outlined in [Fire house sync](https://notes.ethereum.org/eXnqtO_vQquzrFDPHjuaFQ#Key-Prefixes), seems to be a good starting point.
+Since keys and prefixes are sent as nibbles, some schema to signal parity is required. I'm sure there are tons of ways of doing it, but I haven't though about it too much yet, that said what's outlined in [Fire house sync](https://notes.ethereum.org/eXnqtO_vQquzrFDPHjuaFQ#Key-Prefixes), seems to be a good starting point.
