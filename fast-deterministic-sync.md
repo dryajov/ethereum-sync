@@ -77,7 +77,7 @@ NOTE: in leaf mode, this would simply mean "give me all the leafs".
 - make a request to "server" at some root, with prefix `0x0`
   - server responds with a chunk and a stop path
     - use the `key length - stop path length` to determine the prefix length, e.g. if the chunk is built up to level 3, use that as the prefix length
-  - proceed as in the simplified flow above
+  - proceed as in the generalized flow above
   - error, move to the next peer
 
 ### "Server" flow
