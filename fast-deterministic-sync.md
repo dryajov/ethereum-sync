@@ -20,7 +20,7 @@ Can the intermediary nodes, which are essentially proofs be compressed? Maybe so
 
 ## How it works
 
-The simplified flow is something like this:
+The generalized flow is something like this:
 
 (This assumes full sub-tries)
 
