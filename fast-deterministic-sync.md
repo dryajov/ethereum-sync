@@ -91,6 +91,11 @@ In general, this should "just work" for leaf nodes as apposed to full sub-tries 
 
 Whit this mechanism, a partially synced client can serve other clients for the chunks it has available, provided that the chunks are fully validated.
 
+NOTE:
+Is this possible with the current fast and warp sync, and the proposed leaf, firehouse and red queen syncs? 
+
+Also, as stated above, chunks need to be valid, meaning that this most likely wont work for leaf based sync, unless we can guarantee that they are valid. This is much easier with the full chunk.
+
 ## Light clients
 
 A light client can be built on top of a protocol like this. For example, a client running in light mode, can sync only the chunks that it requires based on the accounts/storage keys that are requested from it, but just as in the case of partially synced clients, it can also serve other nodes that are syncing up by delivering only the chunks it has.
