@@ -55,6 +55,7 @@ The simplified flow is something like this:
 - The same protocol works for the state and storage tries
 - All requests are tied to a state or storage root
 - Requested prefixes could be sequential, range based, or even based on clients provided "accounts of interest" (which enables a type of "Light" mode in the client, more on this later)
+- A request with prefix `0x0`, can be used to pull the first few levels of the trie, and then use the stop path to determine the prefix length for subsequent request.
 
 ### Several optimizations can be applied
 
